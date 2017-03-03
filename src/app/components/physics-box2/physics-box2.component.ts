@@ -15,9 +15,16 @@ export class PhysicsBox2Component implements OnInit {
   
     //Bind 'myCanvas2' to the designated canvas in DOM, typed with ElementRef
     @ViewChild('myCanvas2') myCanvas2: ElementRef;
-
+    toggle = function(){
+        /*
+        if(this.megaWorld.active){
+            this.megaWorld.stopStepper();
+        }else{
+            this.megaWorld.startStepper();
+        }*/
+    }
     ngOnInit() {}
-
+    slideToggleModel : boolean;
     ngAfterViewInit() {
         var tempContext = this.myCanvas2.nativeElement.getContext("2d");
         tempContext.translate(0.5, 0.5);
@@ -32,9 +39,8 @@ export class PhysicsBox2Component implements OnInit {
         var Mouse = Matter.Mouse;
         var Vector = Matter.Vector;
 
-        /** 
-         * Heavenly actor class
-         */ 
+
+
 
         /** 
          * Heavenly World class
@@ -77,7 +83,7 @@ export class PhysicsBox2Component implements OnInit {
             }
             initBoundarys(){
                 var groundBox = new createjs.Shape();
-                groundBox.graphics.beginFill("red");
+                groundBox.graphics.beginFill("#2e8f8a");
                 groundBox.graphics.drawRect(0, 290, 500, 10);
                 groundBox.graphics.endFill();
                 this.stage.addChild(groundBox);
@@ -99,9 +105,34 @@ export class PhysicsBox2Component implements OnInit {
             spawn(type?, link?){
                 //TODO, type is news, getStarted etc..
                 //TODO, link is link to HTML
+                var images = [
+                    "assets/images/backup.png",
+                    "assets/images/battery.png",
+                    "assets/images/getstarted.png",
+                    "assets/images/hotapps.png",
+                    "assets/images/kamera.png",
+                    "assets/images/lifehack.png",
+                    "assets/images/moretips.png",
+                    "assets/images/nyheter.png",
+                    "assets/images/test.png",
+                    "assets/images/travel.png",
+                ];
+                /*
+                // This will create a half-size cache (50%)
+                // But scale it back up for you when it displays on the stage
+                var bmp = new createjs.Bitmap(img);
+                bmp.cache(0, 0, img.width, img.height, 0.5);
 
+                // Pull out the generated cache and use it in a new Bitmap
+                // This will display at the new scaled size.
+                var bmp2 = new createjs.Bitmap(bmp.cacheCanvas);
+
+                // Un-cache the first one to reset it if you want
+                bmp.uncache();
+                */
                 //Render Spawn
-                var typeBMP = new createjs.Bitmap("assets/images/test.png");
+                images[Math.floor((Math.random()*images.length-1)+1)];
+                var typeBMP = new createjs.Bitmap(images[Math.floor((Math.random()*images.length))]);
                 typeBMP.x = Math.random()*100+200;
                 typeBMP.y = 0;
                 typeBMP.regX = 25; //middle of image, change later. to be based on type etc...
@@ -123,6 +154,7 @@ export class PhysicsBox2Component implements OnInit {
                 var mega = this;
                 //setTimeout(mega.spawn(), 1000);
             }
+
             startStepper(){
                 this.active = true;
                 this.step();
@@ -139,7 +171,7 @@ export class PhysicsBox2Component implements OnInit {
                 if(this.deltaTime >= 1000/this.fps){
 
                     this.frame += 1;
-                    if(this.frame % 60 ===0){
+                    if(this.frame % Math.floor(Math.random()*360) === 0){
                         this.spawn();
                     }
 
